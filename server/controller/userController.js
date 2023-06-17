@@ -51,13 +51,28 @@ const signup = async (req, res) => {
 
 const watchlater = async (req, res) => {
   try {
-    var watchList = await userModel
+    const { page, pageSize } = req.query;
+    const pageNumber = parseInt(page);
+    const limitNumber = parseInt(pageSize);
+    const skipCount = (pageNumber - 1) * limitNumber;
+    var movies = await userModel
       .find({ _id: req.userId })
       .select("movies")
       .populate({ path: "movies", populate: { path: "genre" } });
-    //await watchList.populate({ path: "movies", model: "movies" });
+    
+    const moviez = movies[0].movies
+    const data = moviez.slice(
+      skipCount,
+      skipCount + limitNumber
+    );
 
-    res.json(watchList);
+    const totalCount = moviez.length;
+    const totalPage = Math.ceil(totalCount / limitNumber);
+    res.json({
+      data,
+      pageNumber,
+      totalPage,
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

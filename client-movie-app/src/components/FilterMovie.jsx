@@ -6,17 +6,13 @@ function FilterMovie({ movieList, setFilterEnable, getMovieList }) {
   const [genreList, setGenreList] = useState([{}]);
   const [selectedGenres, setSelectedGenred] = useState([]);
   const [filterStar, setFilterStar] = useState(0);
-  console.log(
-    "🚀 ~ file: FilterMovie.jsx:9 ~ FilterMovie ~ filterStar:",
-    filterStar
-  );
+  
 
   useEffect(() => {
     getAllGenre();
   }, []);
 
   useEffect(() => {
-    console.log("useeffect filter");
     if (selectedGenres.length != 0 || filterStar > 0) {
       filterList();
       setFilterEnable(true);

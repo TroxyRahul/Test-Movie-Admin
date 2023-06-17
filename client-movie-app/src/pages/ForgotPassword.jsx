@@ -8,11 +8,12 @@ import axios from "axios";
 import { USER_API } from "../constants/const";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
+import useLoader from "../hooks/useLoader";
 
 const ForgotPassword = () => {
-  const [showLoader, setShowLoader] = useState(false);
   const navigate = useNavigate();
   const [mail, setMail] = useState();
+  const { showLoader, setShowLoader } = useLoader();
 
   const handleInputChange = (e) => {
     setMail(e.target.value);
@@ -74,7 +75,7 @@ const ForgotPassword = () => {
       </div>
       <div>
         <Toaster />
-        {showLoader && <Loader />}
+        {showLoader && <Loader/>}
       </div>
     </Layout1>
   );

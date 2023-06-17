@@ -4,7 +4,7 @@ const { generateAccessToken } = require("../utils/jwt");
 const { sendPasswordResetEmailNodeMail } = require("../utils/nodemailer");
 const { generateVerificationCode } = require("../utils/verificationCode");
 
-const PasscodeVerificationData = {};
+var PasscodeVerificationData = {};
 const signIn = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -59,12 +59,9 @@ const watchlater = async (req, res) => {
       .find({ _id: req.userId })
       .select("movies")
       .populate({ path: "movies", populate: { path: "genre" } });
-    
-    const moviez = movies[0].movies
-    const data = moviez.slice(
-      skipCount,
-      skipCount + limitNumber
-    );
+
+    const moviez = movies[0].movies;
+    const data = moviez.slice(skipCount, skipCount + limitNumber);
 
     const totalCount = moviez.length;
     const totalPage = Math.ceil(totalCount / limitNumber);
@@ -114,6 +111,7 @@ const forgotPassword = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   const { passwordReset } = req.body;
+  console.log("🚀 ~ file: userController.js:114 ~ resetPassword ~ passwordReset:", passwordReset)
   if (passwordReset.resetCode == PasscodeVerificationData.code) {
     const hash = await generatePasswordHash(passwordReset.newPassword);
     const update = await userModel.findByIdAndUpdate(
@@ -121,9 +119,10 @@ const resetPassword = async (req, res) => {
       { password: hash },
       { new: true }
     );
+    PasscodeVerificationData = {};
     res.json(update);
   } else {
-    res.status(400).json({ message: "Incorrect reset code entered!😫" });
+    res.status(401).json({ message: "You entered the wrong reset code!.😣" });
   }
 };
 

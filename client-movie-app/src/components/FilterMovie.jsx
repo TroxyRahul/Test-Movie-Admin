@@ -83,7 +83,7 @@ function FilterMovie({ movieList, setFilterEnable, getMovieList }) {
     return stars;
   };
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-end items-center mr-52 ">
       <div className=" p-3 min-w-[350px] ">
         <label htmlFor="" className="label text-sm">
           Genre

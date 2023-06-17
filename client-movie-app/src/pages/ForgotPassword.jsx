@@ -74,7 +74,6 @@ const ForgotPassword = () => {
         </form>
       </div>
       <div>
-        <Toaster />
         {showLoader && <Loader/>}
       </div>
     </Layout1>

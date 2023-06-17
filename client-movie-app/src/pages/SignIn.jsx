@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../components/Input";
 import Label from "../components/Label";
 import Button from "../components/Button";
@@ -12,6 +12,9 @@ import Loader from "../components/Loader";
 function SignIn() {
   const [login, setLogin] = useState({ email: "", password: "" });
   const navigate = useNavigate();
+
+ 
+
   const handleLogin = async (e) => {
     try {
       e.preventDefault();
@@ -88,9 +91,6 @@ function SignIn() {
             Sign up
           </Link>
         </p>
-      </div>
-      <div>
-        <Toaster />
       </div>
     </Layout1>
   );

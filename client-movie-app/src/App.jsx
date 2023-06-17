@@ -8,6 +8,7 @@ import WatchLater from "./pages/WatchLater";
 import Home from "./pages/Home";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const appRouter = createBrowserRouter([
@@ -45,6 +46,9 @@ function App() {
 
   return (
     <div className="h-screen">
+      <div>
+        <Toaster />
+      </div>
       <RouterProvider router={appRouter} />
     </div>
   );

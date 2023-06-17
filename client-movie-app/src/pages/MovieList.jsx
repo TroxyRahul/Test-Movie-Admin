@@ -47,7 +47,7 @@ const MovieList = () => {
       </div>
       <div>
         {!filterEnable && (
-          <div className="join flex justify-center p-5">{pageNo}</div>
+          <div className="join flex justify-center">{pageNo}</div>
         )}
       </div>
     </div>

@@ -108,7 +108,6 @@ const ResetPassword = () => {
         </form>
       </div>
       <div>
-        <Toaster />
         {showLoader && <Loader />}
       </div>
     </Layout1>

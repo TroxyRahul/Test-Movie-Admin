@@ -103,9 +103,9 @@ function SignUp() {
             </Link>
           </p>
         </div>
-        <div>
+        {/* <div>
           <Toaster />
-        </div>
+        </div> */}
       </Layout1>
     </div>
   );

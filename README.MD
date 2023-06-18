@@ -19,7 +19,7 @@ This is a full-stack movie app built with the MERN stack and developed using the
 * Edit or delete movies and genres from the dashboard
 * Add movies to the user's watch later list
 * Pagination with custom hook (usePagination)
-* Filter movies by genre and star rating
+* Filter movies by multi select genre and star rating
 * Authentication using JWT, bcrypt, and custom middleware
 * Password reset functionality via email using Nodemailer
 * Frontend developed with React using JSX, components, state, and custom hooks

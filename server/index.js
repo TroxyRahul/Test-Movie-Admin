@@ -5,6 +5,7 @@ const connectDb = require("./config/db");
 const genreRouter = require("./router/Genre");
 const movieRoter = require("./router/Movie");
 const userRouter = require("./router/user");
+const { notificationRouter } = require("./router/notification");
 
 const app = express();
 app.use(cors());
@@ -16,6 +17,10 @@ app.use("/api/genre", genreRouter);
 app.use("/api/movie", movieRoter);
 
 app.use("/api/user", userRouter);
+
+//app.use("/api/notific", notificationRouter1);
+app.use("/api/notificsse", notificationRouter);
+
 
 const PORT = process.env.PORT || 3457;
 app.listen(PORT, () => console.log("server started at " + PORT));

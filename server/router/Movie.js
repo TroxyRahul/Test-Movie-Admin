@@ -1,6 +1,8 @@
 const express = require("express");
 const movieModel = require("../Models/movieModel");
+const { eventEmitter } = require("./notification");
 const router = express.Router();
+
 
 router.get("/", async (req, res) => {
   try {
@@ -33,6 +35,7 @@ router.post("/", async (req, res) => {
     } else {
       const movieList = await movieModel.create(movie);
       res.json(movieList);
+      //eventEmitter.emit('newMovie', { movie: movieList });
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -84,10 +87,6 @@ router.get("/pagination", async (req, res) => {
 router.post("/filter", async (req, res) => {
   try {
     const { selectedGenres, filterStar } = req.body;
-    console.log(
-      "🚀 ~ file: Movie.js:87 ~ router.post ~ selectedGenres:",
-      selectedGenres.length
-    );
     const genreObjectId = selectedGenres.map((genre) => genre.value);
     let filterList = [];
     if (selectedGenres.length != 0 && filterStar !== 0) {
@@ -111,14 +110,15 @@ router.post("/filter", async (req, res) => {
         .populate("genre")
         .sort({ createdAt: "desc" });
     }
-    console.log(
-      "🚀 ~ file: Movie.js:107 ~ router.post ~ filterList:",
-      filterList
-    );
     res.json(filterList);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
+
+router.get('/notific',async(req,res)=>{
+  console.log('---notifc')
+  eventEmitter.emit('newMovie', { message: 'New Movie Added' });
+})
 
 module.exports = router;

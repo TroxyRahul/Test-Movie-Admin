@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Notification from "./Notification";
 
 function Header() {
   const navigate = useNavigate();
@@ -45,6 +46,7 @@ function Header() {
       </div>
 
       <div className="navbar-end">
+        <Notification/>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
             {data && (

@@ -46,7 +46,7 @@ function Header() {
       </div>
 
       <div className="navbar-end">
-        <Notification/>
+        <Notification />
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
             {data && (
@@ -64,6 +64,7 @@ function Header() {
             </a>
           )}
         </div>
+        
       </div>
     </div>
   );

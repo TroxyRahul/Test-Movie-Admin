@@ -3,7 +3,6 @@ const movieModel = require("../Models/movieModel");
 const { eventEmitter } = require("./notification");
 const router = express.Router();
 
-
 router.get("/", async (req, res) => {
   try {
     const movieList = await movieModel
@@ -28,14 +27,25 @@ router.post("/", async (req, res) => {
     };
 
     if (req.body.id != 0) {
-      const resmovie = await movieModel.findByIdAndUpdate(req.body.id, {
+      const updatedMovie = await movieModel.findByIdAndUpdate(req.body.id, {
         ...movie,
       });
-      res.json(resmovie);
+      res.json(updatedMovie);
+      eventEmitter.emit("newMovie", {
+        id: updatedMovie._id,
+        img: updatedMovie.imageName,
+        name: updatedMovie.movieName,
+        type: 2,
+      });
     } else {
       const movieList = await movieModel.create(movie);
       res.json(movieList);
-      //eventEmitter.emit('newMovie', { movie: movieList });
+      eventEmitter.emit("newMovie", {
+        id: movieList._id,
+        img: movieList.imageName,
+        name: movieList.movieName,
+        type: 1,
+      });
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -116,9 +126,14 @@ router.post("/filter", async (req, res) => {
   }
 });
 
-router.get('/notific',async(req,res)=>{
-  console.log('---notifc')
-  eventEmitter.emit('newMovie', { message: 'New Movie Added' });
-})
+router.get("/notific", async (req, res) => {
+  console.log("---notifc");
+  eventEmitter.emit("newMovie", {
+    id: "ffa234f",
+    img: "http://res.cloudinary.com/dm4djc1b1/image/upload/v1686136488/wjtvqajmlnj8pgxqptmz.jpg",
+    name: "movie Name",
+  });
+  res.json({ message: "success" });
+});
 
 module.exports = router;

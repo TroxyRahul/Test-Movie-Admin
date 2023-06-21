@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MOVIE_LIST_URL } from "../constants/const";
+import { MOVIE_LIST_URL, NOTIFICATION_API } from "../constants/const";
 import axios from "axios";
 import MovieCard from "../components/MovieCard";
 import FilterMovie from "../components/FilterMovie";
@@ -8,7 +8,6 @@ import usePagination from "../hooks/usePagination";
 const MovieList = () => {
   const [movieList, setMovieList] = useState([{}]);
   const [filterEnable, setFilterEnable] = useState(false);
-
   const { pagination, setTotalPage, pageNo } = usePagination({
     pageNo: 1,
     pageSize: 4,
@@ -18,6 +17,19 @@ const MovieList = () => {
   useEffect(() => {
     getMovieList();
   }, [pagination.pageNo, pagination.totalPage]);
+
+  useEffect(() => {
+    const eventSource = new EventSource(NOTIFICATION_API);
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data != null) {
+        getMovieList();
+      }
+    };
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   const getMovieList = async () => {
     const response = await axios(

@@ -65,6 +65,12 @@ router.delete("/", async (req, res) => {
   try {
     const data = await movieModel.findByIdAndDelete(req.body.id);
     res.json(data);
+    eventEmitter.emit("newMovie", {
+      id: data._id,
+      img: data.imageName,
+      name: data.movieName,
+      type: 3,
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

@@ -10,10 +10,10 @@ function Notification() {
     const eventSource = new EventSource(NOTIFICATION_API);
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      setNoti((prev) => [data, ...prev]);
-      toast.custom((t) => (
-        <CustomToast t={t} data={data} />
-      ));
+      if (data.type != 3) {
+        setNoti((prev) => [data, ...prev]);
+        toast.custom((t) => <CustomToast t={t} data={data} />);
+      }
     };
     return () => {
       eventSource.close();
@@ -33,12 +33,19 @@ function Notification() {
         </button>
         <ul
           tabIndex={0}
-          className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 z-10 flex flex-wrap flex-col max-h-60 overflow-y-hidden">
+          className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-64 z-10 flex flex-wrap flex-col max-h-60 overflow-y-hidden">
           {noti.map((item, index) => (
-            <li key={item.id}>
+            <li key={item.id} className="px-3 py-1">
               <a className="justify-between">
                 {item.name}
-                <span className={item.type==1?"badge badge-primary":"badge badge-secondary"}>{item.type==1?'New':"Update"}</span>
+                <span
+                  className={
+                    item.type == 1
+                      ? "badge badge-primary"
+                      : "badge badge-secondary"
+                  }>
+                  {item.type == 1 ? "New" : "Update"}
+                </span>
               </a>
             </li>
           ))}

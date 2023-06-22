@@ -8,8 +8,6 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 const AddMovie = () => {
-  const CLOUD_NAME = "dm4djc1b1";
-  const UPLOAD_PRESET = "eu6yplsi";
   const [img, setImg] = useState(null);
   const [rating, setRating] = useState(0);
   const [genreList, setGenreList] = useState([]);
@@ -17,11 +15,6 @@ const AddMovie = () => {
   const [movieName, setMovieName] = useState("");
   const [movieId, setMovieId] = useState(0);
   const [selectImageUrl, setSelecedImageUrl] = useState("");
-  console.log(
-    "🚀 ~ file: AddMovie.jsx:61 ~ handleImage ~ selectImageUrl:",
-    selectImageUrl
-  );
-
   const navigate = useNavigate();
   const param = useParams();
 
@@ -90,6 +83,7 @@ const AddMovie = () => {
       setSelecedImageUrl(responseData.url);
     }
 
+    console.log("🚀 ~ file: AddMovie.jsx:87 ~ handleAddMovie ~ movieImgUrl:", movieImgUrl)
     if (movieImgUrl != "") {
       const response = await axios(MOVIE_API_URL, {
         method: "POST",

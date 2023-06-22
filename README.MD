@@ -9,6 +9,8 @@
 
 #Pagination, filter, forgot password Demo video: https://github.com/thafsi-pv/MERN-APP1/assets/22377348/ceefeec9-547e-474b-a847-72b9d93b8b66
 
+#Notification for user (New movie add or edit) Demo video: https://github.com/thafsi-pv/MERN-APP1/assets/22377348/060ac2f0-05a7-44af-b2b6-635a902b7019
+
 This is a full-stack movie app built with the MERN stack and developed using the MVC architecture. It features a movie dashboard where users can add new movies to the app and manage their movie collection, as well as a user page that allows users to manage their watch later list. The app also includes functionality to reset user passwords via email.
 
 ## Features
@@ -20,6 +22,8 @@ This is a full-stack movie app built with the MERN stack and developed using the
 * Add movies to the user's watch later list
 * Pagination with custom hook (usePagination)
 * Filter movies by multi select genre and star rating
+* Notification for user while admin add or edit new movie 
+* Refresh movie list automatically if any change in movie data 
 * Authentication using JWT, bcrypt, and custom middleware
 * Password reset functionality via email using Nodemailer
 * Frontend developed with React using JSX, components, state, and custom hooks
@@ -36,8 +40,10 @@ This is a full-stack movie app built with the MERN stack and developed using the
 * MongoDB / Mongoose
 * Cloudinary
 * Nodemailer
+* SSE (Server Side Event) 
 * JWT
 * Bcrypt
 * Axios
 * Cors
 * Tailwind CSS
+* React hot toast

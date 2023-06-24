@@ -15,7 +15,6 @@ const MovieCard = ({ data, setmovielist, movielist, watchlater }) => {
   const handleAddtoWathcLater = async () => {
     try {
       const data = JSON.parse(localStorage.getItem("movieDb"));
-
       const response = await axios(
         "http://localhost:3456/api/user/addwatchlater",
         {
@@ -23,10 +22,6 @@ const MovieCard = ({ data, setmovielist, movielist, watchlater }) => {
           data: { movieid: _id },
           headers: { Authorization: data.token },
         }
-      );
-      console.log(
-        "🚀 ~ file: MovieCard.jsx:31 ~ handleAddtoWathcLater ~ response:",
-        response
       );
       if (response.status == 200) {
         toast.success("Added to watch later");

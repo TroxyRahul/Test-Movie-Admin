@@ -6,6 +6,7 @@ const genreRouter = require("./router/Genre");
 const movieRoter = require("./router/Movie");
 const userRouter = require("./router/user");
 const { notificationRouter } = require("./router/notification");
+const { errorHandle } = require("./middleware/errorHandle");
 
 const app = express();
 //const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
@@ -34,6 +35,8 @@ app.use("/api/user", userRouter);
 
 //app.use("/api/notific", notificationRouter1);
 app.use("/api/notification/sse", notificationRouter);
+
+app.use(errorHandle);
 
 const PORT = process.env.PORT || 3457;
 app.listen(PORT, () => console.log("server started at " + PORT));

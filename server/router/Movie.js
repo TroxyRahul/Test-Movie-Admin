@@ -9,16 +9,22 @@ router.get("/", async (req, res) => {
       .find({})
       .populate("genre")
       .sort({ createdAt: "desc" });
-    console.log("🚀 ~ file: Movie.js:9 ~ router.get ~ movieList:", movieList);
     res.json(movieList);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   try {
-    console.log(req.body);
+    if (!("imageName" in req.body)) {
+      const error = {
+        body: req.body,
+        required: "imageName",
+      };
+      return next(error);
+    }
+
     const movie = {
       imageName: req.body.image,
       movieName: req.body.movieName,

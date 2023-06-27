@@ -113,21 +113,18 @@ router.post("/filter", async (req, res) => {
     const genreObjectId = selectedGenres.map((genre) => genre.value);
     let filterList = [];
     if (selectedGenres.length != 0 && filterStar !== 0) {
-      console.log("-----1");
       filterList = await movieModel
         .find({ genre: { $all: genreObjectId }, rating: (filterStar - 1) * 25 })
         .populate("genre")
         .sort({ createdAt: "desc" });
     }
     if (selectedGenres.length == 0 && filterStar > 0) {
-      console.log("-----2");
       filterList = await movieModel
         .find({ rating: (filterStar - 1) * 25 })
         .populate("genre")
         .sort({ createdAt: "desc" });
     }
     if (selectedGenres.length != 0 && filterStar == 0) {
-      console.log("-----3");
       filterList = await movieModel
         .find({ genre: { $all: genreObjectId } })
         .populate("genre")

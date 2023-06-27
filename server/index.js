@@ -29,11 +29,11 @@ app.use(express.static("public"));
 connectDb();
 
 app.use("/api/genre", genreRouter);
+
 app.use("/api/movie", movieRoter);
 
 app.use("/api/user", userRouter);
 
-//app.use("/api/notific", notificationRouter1);
 app.use("/api/notification/sse", notificationRouter);
 
 app.use(errorHandle);

@@ -17,14 +17,15 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res, next) => {
   try {
+    console.log("🚀 ~ file: Movie.js:21 ~ router.post ~ req.body:", req.body)
     if (!("imageName" in req.body)) {
       const error = {
+        status: 400,
         body: req.body,
         required: "imageName",
       };
       return next(error);
     }
-
     const movie = {
       imageName: req.body.image,
       movieName: req.body.movieName,
@@ -136,16 +137,6 @@ router.post("/filter", async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-});
-
-router.get("/notific", async (req, res) => {
-  console.log("---notifc");
-  eventEmitter.emit("newMovie", {
-    id: "ffa234f",
-    img: "http://res.cloudinary.com/dm4djc1b1/image/upload/v1686136488/wjtvqajmlnj8pgxqptmz.jpg",
-    name: "movie Name",
-  });
-  res.json({ message: "success" });
 });
 
 module.exports = router;

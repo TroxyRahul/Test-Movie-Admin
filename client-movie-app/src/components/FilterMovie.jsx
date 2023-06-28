@@ -38,6 +38,7 @@ function FilterMovie({
     for (let i = 0; i < 5; i++) {
       stars.push(
         <input
+        key={`stars-${i}`}
           type="radio"
           name={i + 1}
           className="mask mask-star-2 bg-orange-400"

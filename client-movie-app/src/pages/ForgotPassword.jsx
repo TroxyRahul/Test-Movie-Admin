@@ -5,14 +5,14 @@ import Label from "../components/Label";
 import Button from "../components/Button";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
-import { USER_API } from "../constants/const";
+import { FORGOT_PASSWORD_API, USER_API } from "../constants/const";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import useLoader from "../hooks/useLoader";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const [mail, setMail] = useState();
+  const [mail, setMail] = useState("");
   const { showLoader, setShowLoader } = useLoader();
 
   const handleInputChange = (e) => {
@@ -23,27 +23,24 @@ const ForgotPassword = () => {
     try {
       if (mail) {
         setShowLoader(true);
-        const data = await axios(
-          "http://localhost:3456/api/user/forgotPassword",
-          {
-            method: "POST",
-            data: { mail },
-          }
-        );
-        if (data.status === 200) {
+        const response = await axios(FORGOT_PASSWORD_API, {
+          method: "POST",
+          data: { mail },
+        });
+        if (response.status === 200) {
           setShowLoader(false);
           toast.success(
             "Your reset code has been sent successfully, Plese check your inbox"
           );
           navigate("/resetPassword");
-        } else if (data.status === 400) {
+        } else if (response.status === 400) {
           toast.error("Failed to send reset code!");
         }
       } else {
         toast.error("Enter mail address!");
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "An error occurred.");
     } finally {
       setShowLoader(false);
     }
@@ -52,7 +49,7 @@ const ForgotPassword = () => {
   return (
     <Layout1 headingLabel="Forgot Password">
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" action="#" method="POST" autoComplete="off">
+        <form className="space-y-6" autoComplete="off">
           <div>
             <Label htmlFor="email" labelText="Email address" />
             <Input
@@ -73,9 +70,7 @@ const ForgotPassword = () => {
           </div>
         </form>
       </div>
-      <div>
-        {showLoader && <Loader/>}
-      </div>
+      <div>{showLoader && <Loader />}</div>
     </Layout1>
   );
 };

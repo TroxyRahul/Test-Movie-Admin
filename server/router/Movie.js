@@ -17,7 +17,6 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    console.log("🚀 ~ file: Movie.js:21 ~ router.post ~ req.body:", req.body)
     if (!("imageName" in req.body)) {
       const error = {
         status: 400,
@@ -33,27 +32,22 @@ router.post("/", async (req, res, next) => {
       genre: req.body.genre,
     };
 
+    let updatedMovie;
     if (req.body.id != 0) {
-      const updatedMovie = await movieModel.findByIdAndUpdate(req.body.id, {
-        ...movie,
-      });
+      updatedMovie = await movieModel.findByIdAndUpdate(req.body.id, movie);
       res.json(updatedMovie);
-      eventEmitter.emit("newMovie", {
-        id: updatedMovie._id,
-        img: updatedMovie.imageName,
-        name: updatedMovie.movieName,
-        type: 2,
-      });
     } else {
-      const movieList = await movieModel.create(movie);
-      res.json(movieList);
-      eventEmitter.emit("newMovie", {
-        id: movieList._id,
-        img: movieList.imageName,
-        name: movieList.movieName,
-        type: 1,
-      });
+      updatedMovie = await movieModel.create(movie);
     }
+    res.json(updatedMovie);
+
+    const eventType = req.body.id !== 0 ? 2 : 1;
+    eventEmitter.emit("newMovie", {
+      id: movieList._id,
+      img: movieList.imageName,
+      name: movieList.movieName,
+      type: eventType,
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -61,7 +55,11 @@ router.post("/", async (req, res, next) => {
 
 router.post("/movieById", async (req, res) => {
   try {
-    const movie = await movieModel.findById(req.body.id);
+    const { id } = req.body;
+    const movie = await movieModel.findById(id);
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
     res.json(movie);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -83,57 +81,62 @@ router.delete("/", async (req, res) => {
   }
 });
 
-router.get("/pagination", async (req, res) => {
-  const { page, pageSize } = req.query;
+router.post("/filter", async (req, res) => {
   try {
+    const { page, pageSize } = req.query;
+    const { selectedGenres, filterStar } = req.body;
+
     const pageNumber = parseInt(page);
     const limitNumber = parseInt(pageSize);
     const skipCount = (pageNumber - 1) * limitNumber;
-    const data = await movieModel
-      .find({})
+    let filter = {};
+    if (selectedGenres.length > 0) {
+      const genreObjectId = selectedGenres.map((genre) => genre.value);
+      filter.genre = { $all: genreObjectId };
+    }
+    if (filterStar > 0) {
+      filter.rating = (filterStar - 1) * 25;
+    }
+    let filterList = await movieModel
+      .find(filter)
       .populate("genre")
       .sort({ createdAt: "desc" })
       .skip(skipCount)
       .limit(limitNumber);
-    const totalCount = await movieModel.countDocuments();
+    const totalCount = await movieModel.countDocuments(filter);
     const totalPage = Math.ceil(totalCount / limitNumber);
     res.json({
-      data,
+      movieList: filterList,
       pageNumber,
       totalPage,
     });
   } catch (error) {
-    res.status(400).json(error);
-  }
-});
-
-router.post("/filter", async (req, res) => {
-  try {
-    const { selectedGenres, filterStar } = req.body;
-    const genreObjectId = selectedGenres.map((genre) => genre.value);
-    let filterList = [];
-    if (selectedGenres.length != 0 && filterStar !== 0) {
-      filterList = await movieModel
-        .find({ genre: { $all: genreObjectId }, rating: (filterStar - 1) * 25 })
-        .populate("genre")
-        .sort({ createdAt: "desc" });
-    }
-    if (selectedGenres.length == 0 && filterStar > 0) {
-      filterList = await movieModel
-        .find({ rating: (filterStar - 1) * 25 })
-        .populate("genre")
-        .sort({ createdAt: "desc" });
-    }
-    if (selectedGenres.length != 0 && filterStar == 0) {
-      filterList = await movieModel
-        .find({ genre: { $all: genreObjectId } })
-        .populate("genre")
-        .sort({ createdAt: "desc" });
-    }
-    res.json(filterList);
-  } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
+
+// router.get("/pagination", async (req, res) => {
+//   const { page, pageSize } = req.query;
+//   try {
+//     const pageNumber = parseInt(page);
+//     const limitNumber = parseInt(pageSize);
+//     const skipCount = (pageNumber - 1) * limitNumber;
+//     const data = await movieModel
+//       .find({})
+//       .populate("genre")
+//       .sort({ createdAt: "desc" })
+//       .skip(skipCount)
+//       .limit(limitNumber);
+//     const totalCount = await movieModel.countDocuments();
+//     const totalPage = Math.ceil(totalCount / limitNumber);
+//     res.json({
+//       data,
+//       pageNumber,
+//       totalPage,
+//     });
+//   } catch (error) {
+//     res.status(400).json(error);
+//   }
+// });
 
 module.exports = router;

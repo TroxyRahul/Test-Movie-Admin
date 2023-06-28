@@ -5,5 +5,6 @@ export const CLOUDINARY_IMAGE_UPLOAD_URL =
 export const USER_API = "http://localhost:3456/api/user/";
 
 export const MOVIE_LIST_URL = "http://localhost:3456/api/movie/pagination?";
+export const MOVIE_PAGINATION_FILTER_URL = "http://localhost:3456/api/movie/filter?";
 
 export const NOTIFICATION_API = "http://localhost:3456/api/notification/sse";

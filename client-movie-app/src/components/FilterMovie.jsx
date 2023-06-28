@@ -2,25 +2,17 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
 
-function FilterMovie({ movieList, setFilterEnable, getMovieList }) {
+function FilterMovie({
+  selectedGenres,
+  filterGenre,
+  selectedStar,
+  filterStar
+}) {
   const [genreList, setGenreList] = useState([{}]);
-  const [selectedGenres, setSelectedGenred] = useState([]);
-  const [filterStar, setFilterStar] = useState(0);
-  
 
   useEffect(() => {
     getAllGenre();
   }, []);
-
-  useEffect(() => {
-    if (selectedGenres.length != 0 || filterStar > 0) {
-      filterList();
-      setFilterEnable(true);
-    } else {
-      setFilterEnable(false);
-      getMovieList();
-    }
-  }, [selectedGenres, filterStar]);
 
   const getAllGenre = async () => {
     const data = await axios(`http://localhost:3456/api/genre`);
@@ -33,22 +25,12 @@ function FilterMovie({ movieList, setFilterEnable, getMovieList }) {
   };
 
   const handleGenreChanges = (selectedOptions) => {
-    setSelectedGenred(selectedOptions);
+    filterGenre(selectedOptions);
   };
 
-  const filterList = async () => {
-    const data = await axios("http://localhost:3456/api/movie/filter", {
-      method: "POST",
-      data: { selectedGenres, filterStar },
-    });
-    console.log("🚀 ~ file: FilterMovie.jsx:42 ~ filterList ~ data:", data);
-    movieList(data?.data);
-  };
 
   const handleStar = (e) => {
-    setFilterStar((prev) =>
-      prev < parseInt(e.target.name) ? parseInt(e.target.name) : prev - 1
-    );
+    filterStar((prev) => (prev < parseInt(e.target.name) ? parseInt(e.target.name) : prev - 1 ));
   };
 
   const star = () => {
@@ -60,12 +42,12 @@ function FilterMovie({ movieList, setFilterEnable, getMovieList }) {
           name={i + 1}
           className="mask mask-star-2 bg-orange-400"
           onClick={handleStar}
-          checked={i + 1 === filterStar}
+          checked={i + 1 === selectedStar}
         />
       );
     }
 
-    if (filterStar === 0) {
+    if (selectedStar === 0) {
       stars = stars.map((star, index) => {
         return (
           <input

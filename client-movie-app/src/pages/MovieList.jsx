@@ -9,7 +9,7 @@ import FilterMovie from "../components/FilterMovie";
 import usePagination from "../hooks/usePagination";
 
 const MovieList = () => {
-  const [movieList, setMovieList] = useState([{}]);
+  const [movieList, setMovieList] = useState([]);
   const { pagination, setTotalPage, pageNo } = usePagination({
     pageNo: 1,
     pageSize: 4,
@@ -37,15 +37,19 @@ const MovieList = () => {
   }, []);
 
   const getMovieList = async () => {
-    const response = await axios(
-      `${MOVIE_PAGINATION_FILTER_URL}page=${pagination.pageNo}&pageSize=${pagination.pageSize}`,
-      {
-        method: "POST",
-        data: { selectedGenres, filterStar },
-      }
-    );
-    setMovieList(response?.data?.movieList);
-    setTotalPage(response?.data?.totalPage);
+    try {
+      const response = await axios(
+        `${MOVIE_PAGINATION_FILTER_URL}page=${pagination.pageNo}&pageSize=${pagination.pageSize}`,
+        {
+          method: "POST",
+          data: { selectedGenres, filterStar },
+        }
+      );
+      setMovieList(response?.data?.movieList);
+      setTotalPage(response?.data?.totalPage);
+    } catch (error) {
+      console.log("Error fetching movie list", error);
+    }
   };
 
   return (

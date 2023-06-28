@@ -22,10 +22,6 @@ function SignUp() {
       method: "POST",
       data: signUpData,
     });
-    console.log(
-      "🚀 ~ file: SignUp.jsx:24 ~ handleSignUp ~ response:",
-      response
-    );
     if (response?.status == 200) {
       toast.success("Successfully completed. please Sign In now");
       navigate("/signin");
@@ -103,9 +99,6 @@ function SignUp() {
             </Link>
           </p>
         </div>
-        {/* <div>
-          <Toaster />
-        </div> */}
       </Layout1>
     </div>
   );

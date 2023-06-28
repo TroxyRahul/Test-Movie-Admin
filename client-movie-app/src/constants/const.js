@@ -8,3 +8,4 @@ export const MOVIE_LIST_URL = "http://localhost:3456/api/movie/pagination?";
 export const MOVIE_PAGINATION_FILTER_URL = "http://localhost:3456/api/movie/filter?";
 
 export const NOTIFICATION_API = "http://localhost:3456/api/notification/sse";
+export const ALL_GENRE_API = "http://localhost:3456/api/genre";

@@ -1,68 +1,61 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
+import { ALL_GENRE_API } from "../constants/const";
 
 function FilterMovie({
   selectedGenres,
   filterGenre,
   selectedStar,
-  filterStar
+  filterStar,
 }) {
-  const [genreList, setGenreList] = useState([{}]);
+  const [genreList, setGenreList] = useState([]);
 
   useEffect(() => {
     getAllGenre();
   }, []);
 
   const getAllGenre = async () => {
-    const data = await axios(`http://localhost:3456/api/genre`);
-    const genreList = data?.data;
-    const updatedGenre = genreList.map(({ genre, _id }) => ({
-      value: _id,
-      label: genre,
-    }));
-    setGenreList(updatedGenre);
+    try {
+      const response = await axios(ALL_GENRE_API);
+      const { data } = response;
+      const updatedGenre = data.map(({ genre, _id }) => ({
+        value: _id,
+        label: genre,
+      }));
+      setGenreList(updatedGenre);
+    } catch (error) {
+      console.log("Error while fetching genre list", error);
+    }
   };
 
   const handleGenreChanges = (selectedOptions) => {
     filterGenre(selectedOptions);
   };
 
-
   const handleStar = (e) => {
-    filterStar((prev) => (prev < parseInt(e.target.name) ? parseInt(e.target.name) : prev - 1 ));
+    filterStar((prev) =>
+      prev < parseInt(e.target.name) ? parseInt(e.target.name) : prev - 1
+    );
   };
 
-  const star = () => {
+  const renderStars = () => {
     let stars = [];
     for (let i = 0; i < 5; i++) {
+      const isChecked = i + 1 <= selectedStar;
       stars.push(
         <input
-        key={`stars-${i}`}
+          key={`stars-${i}`}
           type="radio"
           name={i + 1}
-          className="mask mask-star-2 bg-orange-400"
+          className={`mask mask-star-2 ${
+            isChecked ? "!bg-orange-400" : "!bg-gray-400 opacity-25"
+          }`}
           onClick={handleStar}
-          checked={i + 1 === selectedStar}
+          checked={isChecked}
         />
       );
     }
-
-    if (selectedStar === 0) {
-      stars = stars.map((star, index) => {
-        return (
-          <input
-            key={`star-${index}`}
-            type="radio"
-            name={index + 1}
-            className="mask mask-star-2 bg-gray-400 opacity-25"
-            onClick={handleStar}
-            checked={false}
-          />
-        );
-      });
-    }
-
     return stars;
   };
   return (
@@ -85,7 +78,7 @@ function FilterMovie({
         <label htmlFor="" className="label text-sm">
           Rating
         </label>
-        <div className="rating">{star()}</div>
+        <div className="rating">{renderStars()}</div>
       </div>
     </div>
   );

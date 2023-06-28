@@ -17,7 +17,8 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    if (!("imageName" in req.body)) {
+    console.log("🚀 ~ file: Movie.js:21 ~ router.post ~ req.body:", req.body)
+    if (!("image" in req.body)) {
       const error = {
         status: 400,
         body: req.body,
@@ -35,7 +36,6 @@ router.post("/", async (req, res, next) => {
     let updatedMovie;
     if (req.body.id != 0) {
       updatedMovie = await movieModel.findByIdAndUpdate(req.body.id, movie);
-      res.json(updatedMovie);
     } else {
       updatedMovie = await movieModel.create(movie);
     }
@@ -43,9 +43,9 @@ router.post("/", async (req, res, next) => {
 
     const eventType = req.body.id !== 0 ? 2 : 1;
     eventEmitter.emit("newMovie", {
-      id: movieList._id,
-      img: movieList.imageName,
-      name: movieList.movieName,
+      id: updatedMovie._id,
+      img: updatedMovie.imageName,
+      name: updatedMovie.movieName,
       type: eventType,
     });
   } catch (error) {

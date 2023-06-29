@@ -3,7 +3,7 @@ import Layout1 from "../components/Layout1";
 import Input from "../components/Input";
 import Label from "../components/Label";
 import Button from "../components/Button";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import axios from "axios";
 import { FORGOT_PASSWORD_API, USER_API } from "../constants/const";
 import { useNavigate } from "react-router-dom";

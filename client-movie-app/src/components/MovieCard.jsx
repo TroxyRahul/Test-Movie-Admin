@@ -22,9 +22,7 @@ const MovieCard = ({ data, watchlater }) => {
         toast.success("Added to watch later");
       }
     } catch (error) {
-      //if (error.response.status == 400) {
       navigate("/signin");
-      // }
     }
   };
 

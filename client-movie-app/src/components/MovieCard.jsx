@@ -1,28 +1,23 @@
-import { GoPencil } from "react-icons/go";
-import { BiTrashAlt } from "react-icons/bi";
 import { MdOutlineWatchLater } from "react-icons/md";
 import MovieStars from "./MovieStars";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { MOVIE_API_URL } from "../constants/const";
+import { ADD_WATCH_LATER_API } from "../constants/const";
 import Tooltip from "./Tooltip";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
-const MovieCard = ({ data, setmovielist, movielist, watchlater }) => {
+const MovieCard = ({ data, watchlater }) => {
   const navigate = useNavigate();
   const { _id, movieName, genre, rating, imageName } = data;
 
   const handleAddtoWathcLater = async () => {
     try {
       const data = JSON.parse(localStorage.getItem("movieDb"));
-      const response = await axios(
-        "http://localhost:3456/api/user/addwatchlater",
-        {
-          method: "POST",
-          data: { movieid: _id },
-          headers: { Authorization: data.token },
-        }
-      );
+      const response = await axios(ADD_WATCH_LATER_API, {
+        method: "POST",
+        data: { movieid: _id },
+        headers: { Authorization: data.token },
+      });
       if (response.status == 200) {
         toast.success("Added to watch later");
       }

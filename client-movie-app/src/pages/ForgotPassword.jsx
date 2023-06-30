@@ -5,7 +5,7 @@ import Label from "../components/Label";
 import Button from "../components/Button";
 import { toast } from "react-hot-toast";
 import axios from "axios";
-import { FORGOT_PASSWORD_API, USER_API } from "../constants/const";
+import { FORGOT_PASSWORD_API } from "../constants/const";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import useLoader from "../hooks/useLoader";

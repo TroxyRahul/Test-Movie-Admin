@@ -7,7 +7,6 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { USER_API } from "../constants/const";
-import Loader from "../components/Loader";
 
 function SignIn() {
   const [login, setLogin] = useState({ email: "", password: "" });

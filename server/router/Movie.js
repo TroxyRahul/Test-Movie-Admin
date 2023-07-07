@@ -17,7 +17,6 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    console.log("🚀 ~ file: Movie.js:21 ~ router.post ~ req.body:", req.body)
     if (!("image" in req.body)) {
       const error = {
         status: 400,
